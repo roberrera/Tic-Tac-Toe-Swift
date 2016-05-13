@@ -10,8 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    
-    var activePlayer = 1    // 1 = o's; 2 = x's
+    // 1 = o's; 2 = x's
+    var activePlayer = 1
+    // This is the current game's spaces to be checked against the arrays of winning combinations.
     var gameState = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     let winningCombination = [[0,1,2], [3,4,5], [6,7,8], [0,4,8], [2,4,6], [0,3,6], [1,4,7], [2,5,8]]
     var gameActive = true
@@ -19,8 +20,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var gameOverLabel: UILabel!
     @IBOutlet weak var button: UIButton!
     @IBOutlet weak var playAgain: UIButton!
+    
     @IBAction func playAgainButton(sender: AnyObject) {
-
+        // If the game is active, hide the "Game over" label and "play again" button.
         gameState = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         gameActive = true
         gameOverLabel.hidden = true
@@ -30,18 +32,21 @@ class ViewController: UIViewController {
         playAgain.center = CGPointMake(playAgain.center.x - 500, playAgain.center.y)
         
         var buttonToClear : UIButton
+        
+        // This is the new way to write For loops in Swift, as it is moving away from the C-based syntax.
         for i in 0 ..< 9 {
+            // If "play again" is pressed, clear all of the squares.
             buttonToClear = view.viewWithTag(i) as! UIButton
             buttonToClear.setImage(nil, forState: .Normal)
         }
-
     }
+    
     @IBAction func buttonPressed(sender: AnyObject) {
         
         if (gameState[sender.tag] == 0 && gameActive) {
-
             gameState[sender.tag] = activePlayer
 
+            // Sets whether an X or O is marked in the box tapped.
             if activePlayer == 1 {
                 sender.setImage(UIImage(named: "nought.png"), forState: .Normal)
                 activePlayer = 2
@@ -49,6 +54,8 @@ class ViewController: UIViewController {
                 sender.setImage(UIImage(named: "cross.png"), forState: .Normal)
                 activePlayer = 1
             }
+            
+            // Check for winning combinations after each turn.
             for combination in winningCombination {
                 if (gameState[combination[0]] != 0 && gameState[combination[0]] == gameState[combination[1]] && gameState[combination[1]] == gameState[combination[2]]) {
                     
